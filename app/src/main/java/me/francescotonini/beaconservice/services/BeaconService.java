@@ -131,12 +131,36 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
             // NOTA: id1, id2 e id3 sono tre parametri generici che potrebbero variare per ogni
             // produttore di beacon. Nel caso di altbeacon, id1 è l'uuid, id2 e id3 sono major/minor
 
+            String id1 = "null";
+            try {
+                id1 = b.getId1().toString();
+            }
+            catch (Exception ex) {
+                Logger.e(BeaconService.class.getSimpleName(), ex.getMessage());
+            }
+
+            String id2 = "null";
+            try {
+                id2 = b.getId2().toString();
+            }
+            catch (Exception ex) {
+                Logger.e(BeaconService.class.getSimpleName(), ex.getMessage());
+            }
+
+            String id3 = "null";
+            try {
+                id3 = b.getId3().toString();
+            }
+            catch (Exception ex) {
+                Logger.e(BeaconService.class.getSimpleName(), ex.getMessage());
+            }
+
             listOfBeacons.add(new me.francescotonini.beaconservice.models.Beacon(
                     b.getBluetoothAddress(),
-                    b.getId1().toUuid().toString(),
-                    b.getRssi(),
-                    b.getId2().toInt(),
-                    b.getId3().toInt()
+                    id1,
+                    id2,
+                    id3,
+                    b.getRssi()
             ));
         }
 

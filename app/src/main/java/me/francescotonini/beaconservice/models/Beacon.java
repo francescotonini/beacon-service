@@ -36,17 +36,17 @@ public class Beacon {
     /**
      * Inizializza una nuova istanza di questa class
      * @param address indirizzo mac del beacon
-     * @param uuid uuid del beacon
+     * @param id1 id1 del beacon
+     * @param id2 id2 del beacon
+     * @param id3 id3 del beacon
      * @param rssi rssi del beacon
-     * @param major major
-     * @param minor minor
      */
-    public Beacon(String address, String uuid, int rssi, int major, int minor) {
+    public Beacon(String address, String id1, String id2, String id3, int rssi) {
         this.address = address;
-        this.uuid = uuid;
+        this.id1 = id1;
+        this.id2 = id2;
+        this.id3 = id3;
         this.rssi = rssi;
-        this.major = major;
-        this.minor = minor;
     }
 
     /**
@@ -76,11 +76,27 @@ public class Beacon {
     }
 
     /**
-     * Restituisce l'uuid del beacon
-     * @return uuid del beacon
+     * Restituisce l'id1 del beacon
+     * @return id1 del beacon
      */
-    public String getUuid() {
-        return uuid;
+    public String getId1() {
+        return id1;
+    }
+
+    /**
+     * Restituisce l'id2 del beacon
+     * @return id2 del beacon
+     */
+    public String getId2() {
+        return id2;
+    }
+
+    /**
+     * Restituisce l'id3 del beacon
+     * @return id3 del beacon
+     */
+    public String getId3() {
+        return id3;
     }
 
     /**
@@ -91,27 +107,11 @@ public class Beacon {
         return rssi;
     }
 
-    /**
-     * Restituisce il major del beacon
-     * @return major del beacon
-     */
-    public int getMajor() {
-        return major;
-    }
-
-    /**
-     * Restituisce il minor del beacon
-     * @return
-     */
-    public int getMinor() {
-        return minor;
-    }
-
     @PrimaryKey(autoGenerate = true)
     private int id;
     private final String address;
-    private final String uuid;
+    private final String id1;
+    private final String id2;
+    private final String id3;
     private final int rssi;
-    private final int major;
-    private final int minor;
 }
