@@ -25,8 +25,10 @@
 
 package me.francescotonini.beaconservice.db.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
 import java.util.List;
 import me.francescotonini.beaconservice.models.Beacon;
 
@@ -34,4 +36,10 @@ import me.francescotonini.beaconservice.models.Beacon;
 public interface BeaconDao {
     @Insert
     void insert(List<Beacon> beacons);
+
+    @Query("SELECT * FROM beacons")
+    LiveData<List<Beacon>> getAll();
+
+    @Query("DELETE FROM beacons")
+    void clear();
 }

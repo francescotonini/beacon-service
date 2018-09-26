@@ -28,7 +28,6 @@ package me.francescotonini.beaconservice.views;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import me.francescotonini.beaconservice.Logger;
-import me.francescotonini.beaconservice.viewmodels.BaseViewModel;
 
 /**
  * Standard Activity skeleton
@@ -46,23 +45,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void setToolbar();
 
     /**
-     * Gets the view model
-     * @return view model
-     */
-    protected abstract BaseViewModel getViewModel();
-
-    /**
      * Sets the UI binding
      */
     protected abstract void setBinding();
-
-    /**
-     * Gets the current activity
-     * @return current activity
-     */
-    public BaseActivity getCurrentActivity() {
-        return this;
-    }
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

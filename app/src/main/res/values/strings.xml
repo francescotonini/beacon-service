@@ -28,6 +28,11 @@
 
     <string name="start_service">Avvia servizio in background</string>
     <string name="end_service">Termina servizio in background</string>
-    <string name="notification_title">Servizio attivo</string>
-    <string name="notification_message">Analisi beacon in esecuzione</string>
+    <string name="export_data">Esporta dati</string>
+    <string name="clean_data">Cancella dati</string>
+
+    <string name="notification_title">Analisi beacon attiva</string>
+    <string name="notification_message">%d beacon trovati</string>
+    <string name="notification_title_error">Analisi beacon arrestata</string>
+    <string name="notification_message_error">Si è verificato un errore non previsto</string>
 </resources>

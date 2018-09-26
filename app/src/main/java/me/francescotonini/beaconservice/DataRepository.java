@@ -27,10 +27,7 @@ package me.francescotonini.beaconservice;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
-import org.altbeacon.beacon.BeaconManager;
-
 import me.francescotonini.beaconservice.db.AppDatabase;
-import me.francescotonini.beaconservice.repositories.SensorsRepository;
 
 /**
  * Wraps every repository of this project
@@ -53,20 +50,20 @@ public class DataRepository {
         return instance;
     }
 
-    /**
-     * Gets an instance of {@link SensorsRepository}
-     * @return an instance of {@link SensorsRepository}
-     */
-    public SensorsRepository getSensorsRepository() {
-        return sensorsRepository;
+    public AppDatabase getDatabase() {
+        return database;
+    }
+
+    public AppExecutors getAppExecutors() {
+        return appExecutors;
     }
 
     private DataRepository(final Context context, final AppExecutors appExecutors) {
         database = Room.databaseBuilder(context, AppDatabase.class, "appDatabase").build();
-        sensorsRepository = new SensorsRepository(context, appExecutors, database, null, BeaconManager.getInstanceForApplication(context));
+        this.appExecutors = appExecutors;
     }
 
     private static DataRepository instance;
+    private final AppExecutors appExecutors;
     private final AppDatabase database;
-    private final SensorsRepository sensorsRepository;
 }
