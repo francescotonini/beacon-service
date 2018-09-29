@@ -47,8 +47,10 @@ import me.francescotonini.beaconservice.Logger;
 import me.francescotonini.beaconservice.R;
 import me.francescotonini.beaconservice.databinding.ActivityMainBinding;
 import me.francescotonini.beaconservice.db.AppDatabase;
+import me.francescotonini.beaconservice.models.AP;
 import me.francescotonini.beaconservice.models.Beacon;
 import me.francescotonini.beaconservice.services.BeaconService;
+import me.francescotonini.beaconservice.services.WifiService;
 
 public class MainActivity extends BaseActivity {
     @Override
@@ -77,47 +79,49 @@ public class MainActivity extends BaseActivity {
         database = ((BeaconServiceApp)getApplication()).getDataRepository().getDatabase();
         database.beaconDao().getAll().observe(this, beacons -> {
             this.beacons = beacons;
-            binding.numberOfData.setText(String.format("%d registrazioni salvate in locale", this.beacons.size()));
+            binding.numberOfBeacons.setText(String.format("%d beacon salvati in locale", this.beacons.size()));
+        });
+
+        database.apDao().getAll().observe(this, aps -> {
+            this.aps = aps;
+            binding.numberOfAps.setText(String.format("%d ap salvati in locale", this.aps.size()));
         });
 
         binding.startService.setOnClickListener(click -> startForegroundService());
         binding.stopService.setOnClickListener(click -> stopForegroundService());
-        binding.cleanData.setOnClickListener(click -> appExecutors.diskIO().execute(() -> database.beaconDao().clear()));
+        binding.cleanData.setOnClickListener(click -> appExecutors.diskIO().execute(() -> {
+            database.beaconDao().clear();
+            database.apDao().clear();
+        }));
         binding.exportData.setOnClickListener(click -> {
             Gson gson = new Gson();
-            String json = gson.toJson(beacons);
-
-            try {
-                File root = new File(Environment.getExternalStorageDirectory(), "Beacons");
-                if (!root.exists()) {
-                    root.mkdirs();
-                }
-                File gpxfile = new File(root, String.format("%d.json", System.currentTimeMillis()));
-                FileWriter writer = new FileWriter(gpxfile);
-                writer.append(json);
-                writer.flush();
-                writer.close();
-                Toast.makeText(this, "Dati esportati nella cartella \"Beacons\"", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            writeToFile("beacon", gson.toJson(beacons));
+            writeToFile("ap", gson.toJson(aps));
         });
     }
 
     private void startForegroundService() {
         Logger.d(MainActivity.class.getSimpleName(), "Starting foreground service");
 
-        beaconService = new Intent(this, BeaconService.class);
+        Intent beaconService = new Intent(this, BeaconService.class);
         beaconService.setAction(BeaconService.ACTIONS.START.toString());
         startService(beaconService);
+
+        Intent wifiService = new Intent(this, WifiService.class);
+        wifiService.setAction(WifiService.ACTIONS.START.toString());
+        startService(wifiService);
     }
 
     private void stopForegroundService() {
         Logger.d(MainActivity.class.getSimpleName(), "Stopping foreground service");
 
-        beaconService = new Intent(this, BeaconService.class);
+        Intent beaconService = new Intent(this, BeaconService.class);
         beaconService.setAction(BeaconService.ACTIONS.STOP.toString());
         startService(beaconService);
+
+        Intent wifiService = new Intent(this, WifiService.class);
+        wifiService.setAction(WifiService.ACTIONS.STOP.toString());
+        startService(wifiService);
     }
 
     private void askForPermissions() {
@@ -136,14 +140,43 @@ public class MainActivity extends BaseActivity {
             permissionsToAsk.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            // Ask for permission
+            permissionsToAsk.add(Manifest.permission.CHANGE_WIFI_STATE);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            // Ask for permission
+            permissionsToAsk.add(Manifest.permission.ACCESS_WIFI_STATE);
+        }
+
         if (permissionsToAsk.size() > 0) {
             ActivityCompat.requestPermissions(this, permissionsToAsk.toArray(new String[permissionsToAsk.size()]), requestResult);
         }
     }
 
-    private Intent beaconService;
+    private void writeToFile(String filename, String json) {
+        try {
+            File root = new File(Environment.getExternalStorageDirectory(), "Beacon service");
+            if (!root.exists()) {
+                root.mkdirs();
+            }
+            File gpxfile = new File(root, String.format("%s_%d.json", filename, System.currentTimeMillis()));
+            FileWriter writer = new FileWriter(gpxfile);
+            writer.append(json);
+            writer.flush();
+            writer.close();
+            Toast.makeText(this, "Dati esportati nella cartella \"Beacon service\"", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private ActivityMainBinding binding;
     private AppDatabase database;
     private List<Beacon> beacons;
+    private List<AP> aps;
     private AppExecutors appExecutors;
 }

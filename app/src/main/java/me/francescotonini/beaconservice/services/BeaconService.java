@@ -176,11 +176,11 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
                 PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
 
         // Se il parametro della funzione è -1 visualizzo un messaggio di errore sulla notifica
-        String notificationTitle = getString(R.string.notification_title);
-        String notificationMessage = String.format(getString(R.string.notification_message), beaconsFoundSoFar);
+        String notificationTitle = getString(R.string.beacon_service_notification_title);
+        String notificationMessage = String.format(getString(R.string.beacon_service_notification_message), beaconsFoundSoFar);
         if (beaconsFoundSoFar == -1) {
-            notificationMessage = getString(R.string.notification_message_error);
-            notificationTitle = getString(R.string.notification_title_error);
+            notificationMessage = getString(R.string.beacon_service_notification_message_error);
+            notificationTitle = getString(R.string.beacon_service_notification_title_error);
         }
 
         Notification notification = new NotificationCompat.Builder(this, "miscellaneous")

@@ -23,17 +23,23 @@
  *
  */
 
-package me.francescotonini.beaconservice.db;
+package me.francescotonini.beaconservice.db.dao;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
-import me.francescotonini.beaconservice.db.dao.APDao;
-import me.francescotonini.beaconservice.db.dao.BeaconDao;
+import android.arch.lifecycle.LiveData;
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
+import java.util.List;
 import me.francescotonini.beaconservice.models.AP;
-import me.francescotonini.beaconservice.models.Beacon;
 
-@Database(entities = { Beacon.class, AP.class }, version = 1)
-public abstract class AppDatabase extends RoomDatabase {
-    public abstract BeaconDao beaconDao();
-    public abstract APDao apDao();
+@Dao
+public interface APDao {
+    @Insert
+    void insert(List<AP> aps);
+
+    @Query("SELECT * FROM aps")
+    LiveData<List<AP>> getAll();
+
+    @Query("DELETE FROM aps")
+    void clear();
 }

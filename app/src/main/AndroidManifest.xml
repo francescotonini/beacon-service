@@ -28,6 +28,8 @@
     package="me.francescotonini.beaconservice">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -39,6 +41,7 @@
         android:theme="@style/app_theme"
         android:name=".BeaconServiceApp">
         <service android:name=".services.BeaconService" />
+        <service android:name=".services.WifiService" />
 
         <activity android:name=".views.MainActivity">
             <intent-filter>
@@ -47,6 +50,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".receivers.WifiReceiver" />
     </application>
 
 </manifest>

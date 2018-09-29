@@ -27,86 +27,75 @@ package me.francescotonini.beaconservice.models;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+
 import java.util.Calendar;
 
 /**
- * Rappresenta un beacon
+ * Rappresenta un access point
  */
-@Entity(tableName = "beacons")
-public class Beacon {
+@Entity(tableName = "aps")
+public class AP {
     /**
-     * Inizializza una nuova istanza di questa class
-     * @param address indirizzo mac del beacon
-     * @param id1 id1 del beacon
-     * @param id2 id2 del beacon
-     * @param id3 id3 del beacon
-     * @param rssi rssi del beacon
+     * Inizializza una nuova istanza di questa classe
+     * @param ssid ssid
+     * @param bssid bssid
+     * @param capabilities capabilities
+     * @param freq0 freq0
+     * @param freq1 freq1
+     * @param channelWidth channelWidth
+     * @param frequency frequency
+     * @param level level
      */
-    public Beacon(String address, String id1, String id2, String id3, int rssi) {
-        this.address = address;
-        this.id1 = id1;
-        this.id2 = id2;
-        this.id3 = id3;
-        this.rssi = rssi;
+    public AP(String ssid, String bssid, String capabilities, int freq0, int freq1, int channelWidth, int frequency, int level) {
+        this.ssid = ssid;
+        this.bssid = bssid;
+        this.capabilities = capabilities;
+        this.freq0 = freq0;
+        this.freq1 = freq1;
+        this.channelWidth = channelWidth;
+        this.frequency = frequency;
+        this.level = level;
         this.timestamp = Calendar.getInstance().getTimeInMillis();
     }
 
-    /**
-     * Restituisce l'id univoco di questa classe nel database
-     * (detto in altre parole, questo campo rappresenta una chiave primaria auto incrementante.
-     * Non è il massimo per grossi progetti ma in questo caso è perfetta)
-     * @return id univoco di questa classe nel database
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * Imposta l'id univoco di questa classe nel database
-     * @param id id univoco di questa classe nel database
-     */
+    public String getSsid() {
+        return ssid;
+    }
+
+    public String getBssid() {
+        return bssid;
+    }
+
+    public String getCapabilities() {
+        return capabilities;
+    }
+
+    public int getFreq0() {
+        return freq0;
+    }
+
+    public int getFreq1() {
+        return freq1;
+    }
+
+    public int getChannelWidth() {
+        return channelWidth;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
     public void setId(int id) {
         this.id = id;
-    }
-
-    /**
-     * Restituisce l'indirizzo del beacon
-     * @return indirizzo del beacon
-     */
-    public String getAddress() {
-        return address;
-    }
-
-    /**
-     * Restituisce l'id1 del beacon
-     * @return id1 del beacon
-     */
-    public String getId1() {
-        return id1;
-    }
-
-    /**
-     * Restituisce l'id2 del beacon
-     * @return id2 del beacon
-     */
-    public String getId2() {
-        return id2;
-    }
-
-    /**
-     * Restituisce l'id3 del beacon
-     * @return id3 del beacon
-     */
-    public String getId3() {
-        return id3;
-    }
-
-    /**
-     * Restituisce l'rssi del beacon
-     * @return rssi del beacon
-     */
-    public int getRssi() {
-        return rssi;
     }
 
     /**
@@ -127,10 +116,13 @@ public class Beacon {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private final String address;
-    private final String id1;
-    private final String id2;
-    private final String id3;
-    private final int rssi;
+    private final String ssid;
+    private final String bssid;
+    private final String capabilities;
+    private final int freq0;
+    private final int freq1;
+    private final int channelWidth;
+    private final int frequency;
+    private final int level;
     private long timestamp;
 }

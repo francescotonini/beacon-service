@@ -31,8 +31,13 @@
     <string name="export_data">Esporta dati</string>
     <string name="clean_data">Cancella dati</string>
 
-    <string name="notification_title">Analisi beacon attiva</string>
-    <string name="notification_message">%d beacon trovati</string>
-    <string name="notification_title_error">Analisi beacon arrestata</string>
-    <string name="notification_message_error">Si è verificato un errore non previsto</string>
+    <string name="beacon_service_notification_title">Analisi beacon attiva</string>
+    <string name="beacon_service_notification_message">%d beacon trovati</string>
+    <string name="beacon_service_notification_title_error">Analisi beacon arrestata</string>
+    <string name="beacon_service_notification_message_error">Si è verificato un errore non previsto</string>
+
+    <string name="wifi_service_notification_title">Analisi wifi attiva</string>
+    <string name="wifi_service_notification_message">%d wifi trovati</string>
+    <string name="wifi_service_notification_title_error">Analisi wifi arrestata</string>
+    <string name="wifi_service_notification_message_error">Si è verificato un errore non previsto</string>
 </resources>
