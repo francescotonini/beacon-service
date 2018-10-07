@@ -55,6 +55,15 @@ public class WifiReceiver extends BroadcastReceiver {
         this.manager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
     }
 
+    /**
+     * Inizializza una nuova istanza di questa classe
+     */
+    public WifiReceiver() {
+        this.listener = null;
+        this.context = null;
+        this.manager = null;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         this.listener.onData(manager.getScanResults());
