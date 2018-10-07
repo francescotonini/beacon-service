@@ -59,7 +59,8 @@ public class DataRepository {
     }
 
     private DataRepository(final Context context, final AppExecutors appExecutors) {
-        database = Room.databaseBuilder(context, AppDatabase.class, "appDatabase").build();
+        database = Room.databaseBuilder(context, AppDatabase.class, "appDatabase")
+                .fallbackToDestructiveMigration().build();
         this.appExecutors = appExecutors;
     }
 

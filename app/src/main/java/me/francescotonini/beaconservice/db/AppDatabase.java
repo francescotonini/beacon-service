@@ -32,7 +32,7 @@ import me.francescotonini.beaconservice.db.dao.BeaconDao;
 import me.francescotonini.beaconservice.models.AP;
 import me.francescotonini.beaconservice.models.Beacon;
 
-@Database(entities = { Beacon.class, AP.class }, version = 1)
+@Database(entities = { Beacon.class, AP.class }, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract BeaconDao beaconDao();
     public abstract APDao apDao();
