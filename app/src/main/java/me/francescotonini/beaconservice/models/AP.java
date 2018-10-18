@@ -26,11 +26,8 @@
 package me.francescotonini.beaconservice.models;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -39,32 +36,6 @@ import java.util.Locale;
  */
 @Entity(tableName = "aps")
 public class AP {
-
-    /**
-     * Inizializza una nuova istanza di questa classe
-     * @param ssid ssid
-     * @param bssid bssid
-     * @param capabilities capabilities
-     * @param freq0 freq0
-     * @param freq1 freq1
-     * @param channelWidth channelWidth
-     * @param frequency frequency
-     * @param level level
-     */
-    /*@Ignore
-    public AP(String ssid, String bssid, String capabilities, int freq0, int freq1, int channelWidth, int frequency, int level) {
-        this.ssid = ssid;
-        this.bssid = bssid;
-        this.capabilities = capabilities;
-        this.freq0 = freq0;
-        this.freq1 = freq1;
-        this.channelWidth = channelWidth;
-        this.frequency = frequency;
-        this.level = level;
-        this.timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
-                Locale.getDefault()).format(new Date());
-    }*/
-
     /**
      * Inizializza una nuova istanza di questa classe
      * @param bssid bssid
@@ -92,30 +63,6 @@ public class AP {
 
     public String getType() {return type;}
 
-    /*public String getSsid() {
-        return ssid;
-    }*/
-
-    /*public String getCapabilities() {
-        return capabilities;
-    }*/
-
-    /*public int getFreq0() {
-        return freq0;
-    }*/
-
-    /*public int getFreq1() {
-        return freq1;
-    }*/
-
-    /*public int getChannelWidth() {
-        return channelWidth;
-    }*/
-
-    /*public int getFrequency() {
-        return frequency;
-    }*/
-
     public void setId(int id) {
         this.id = id;
     }
@@ -136,7 +83,10 @@ public class AP {
         this.timestamp = timestamp;
     }
 
-
+    /**
+     * Imposta il tipo di AP
+     * @param type tipo di AP
+     */
     public void setType(String type) {
         this.type = type;
     }
@@ -147,11 +97,4 @@ public class AP {
     private final int level;
     private String timestamp;
     private String type;
-
-    // private final int frequency;
-    // private final int channelWidth;
-    // private final int freq1;
-    // private final int freq0;
-    // private final String capabilities;
-    // private final String ssid;
 }
