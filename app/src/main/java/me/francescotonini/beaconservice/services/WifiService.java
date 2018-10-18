@@ -118,15 +118,7 @@ public class WifiService extends Service implements WifiReceiver.Listener {
         for(ScanResult result: scanResults) {
             // result.SSID.equals("UNIVAIR-OPEN")
             if (true) {
-                univrAPs.add(new AP(result.SSID,
-                        result.BSSID,
-                        result.capabilities,
-                        result.centerFreq0,
-                        result.centerFreq1,
-                        result.channelWidth,
-                        result.frequency,
-                        result.level
-                ));
+                univrAPs.add(new AP(result.BSSID, result.level));
             }
         }
 
@@ -155,7 +147,7 @@ public class WifiService extends Service implements WifiReceiver.Listener {
                 .setContentTitle(notificationTitle)
                 .setContentText(notificationMessage)
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_stat_name)
                 .setOngoing(true).build();
 
         startForeground(NOTIFICATION_ID, notification);
@@ -169,7 +161,7 @@ public class WifiService extends Service implements WifiReceiver.Listener {
         wifiReceiver.stop();
     }
 
-    private final int NOTIFICATION_ID = 2;
+    private final static int NOTIFICATION_ID = 2;
     private AppDatabase database;
     private AppExecutors appExecutors;
     private WifiReceiver wifiReceiver;

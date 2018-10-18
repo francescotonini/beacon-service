@@ -69,7 +69,7 @@ public class WifiReceiver extends BroadcastReceiver {
         this.listener.onData(manager.getScanResults());
 
         // Forza la ricerca, usare con cautela
-        // manager.startScan();
+        manager.startScan();
     }
 
     /**
@@ -80,6 +80,7 @@ public class WifiReceiver extends BroadcastReceiver {
         filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 
         context.registerReceiver(this, filter);
+        running = true;
         manager.startScan();
     }
 
@@ -87,9 +88,13 @@ public class WifiReceiver extends BroadcastReceiver {
      * Arresta la ricerca
      */
     public void stop() {
-        context.unregisterReceiver(this);
+        if (running) {
+            context.unregisterReceiver(this);
+            running = false;
+        }
     }
 
+    private boolean running = false;
     private final Listener listener;
     private final Context context;
     private final WifiManager manager;
