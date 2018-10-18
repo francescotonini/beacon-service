@@ -223,6 +223,7 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
     }
 
     private void startPolling() {
+        // moved to onBeaconServiceConnect method
     }
 
     private void stopPolling() {
