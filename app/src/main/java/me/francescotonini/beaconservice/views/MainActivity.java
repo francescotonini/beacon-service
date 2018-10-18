@@ -132,6 +132,12 @@ public class MainActivity extends BaseActivity {
         List<String> permissionsToAsk = new ArrayList<>();
         int requestResult = 0;
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            // Ask for permission
+            permissionsToAsk.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
             // Ask for permission

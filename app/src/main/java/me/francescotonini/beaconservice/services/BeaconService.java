@@ -84,6 +84,7 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
         beaconManager.getBeaconParsers().add(new BeaconParser("iBeacon")
                 .setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
         //noinspection deprecation
+        // 😏
         BeaconManager.setDebug(true);
         beaconManager.bind(this);
         beaconRegion = new Region("beacon_region", null, null, null);
