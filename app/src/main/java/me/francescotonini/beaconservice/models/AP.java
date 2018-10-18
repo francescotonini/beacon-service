@@ -26,15 +26,20 @@
 package me.francescotonini.beaconservice.models;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Rappresenta un access point
  */
 @Entity(tableName = "aps")
 public class AP {
+
     /**
      * Inizializza una nuova istanza di questa classe
      * @param ssid ssid
@@ -46,6 +51,7 @@ public class AP {
      * @param frequency frequency
      * @param level level
      */
+    /*@Ignore
     public AP(String ssid, String bssid, String capabilities, int freq0, int freq1, int channelWidth, int frequency, int level) {
         this.ssid = ssid;
         this.bssid = bssid;
@@ -55,44 +61,60 @@ public class AP {
         this.channelWidth = channelWidth;
         this.frequency = frequency;
         this.level = level;
-        this.timestamp = Calendar.getInstance().getTimeInMillis();
+        this.timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
+                Locale.getDefault()).format(new Date());
+    }*/
+
+    /**
+     * Inizializza una nuova istanza di questa classe
+     * @param bssid bssid
+     * @param level level
+     */
+    public AP(String bssid, int level) {
+        this.bssid = bssid;
+        this.level = level;
+        this.type = "WIFI";
+        this.timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
+                Locale.getDefault()).format(new Date());
     }
 
     public int getId() {
         return id;
     }
 
-    public String getSsid() {
-        return ssid;
-    }
-
     public String getBssid() {
         return bssid;
-    }
-
-    public String getCapabilities() {
-        return capabilities;
-    }
-
-    public int getFreq0() {
-        return freq0;
-    }
-
-    public int getFreq1() {
-        return freq1;
-    }
-
-    public int getChannelWidth() {
-        return channelWidth;
-    }
-
-    public int getFrequency() {
-        return frequency;
     }
 
     public int getLevel() {
         return level;
     }
+
+    public String getType() {return type;}
+
+    /*public String getSsid() {
+        return ssid;
+    }*/
+
+    /*public String getCapabilities() {
+        return capabilities;
+    }*/
+
+    /*public int getFreq0() {
+        return freq0;
+    }*/
+
+    /*public int getFreq1() {
+        return freq1;
+    }*/
+
+    /*public int getChannelWidth() {
+        return channelWidth;
+    }*/
+
+    /*public int getFrequency() {
+        return frequency;
+    }*/
 
     public void setId(int id) {
         this.id = id;
@@ -102,7 +124,7 @@ public class AP {
      * Restituisce il timestamp di creazione dell'oggetto
      * @return timestamp di creazione dell'oggetto
      */
-    public long getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
@@ -110,19 +132,26 @@ public class AP {
      * Imposta il timestamp di creazione dell'oggetto
      * @param timestamp timestamp di creazione dell'oggetto
      */
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private final String ssid;
     private final String bssid;
-    private final String capabilities;
-    private final int freq0;
-    private final int freq1;
-    private final int channelWidth;
-    private final int frequency;
     private final int level;
-    private long timestamp;
+    private String timestamp;
+    private String type;
+
+    // private final int frequency;
+    // private final int channelWidth;
+    // private final int freq1;
+    // private final int freq0;
+    // private final String capabilities;
+    // private final String ssid;
 }

@@ -41,16 +41,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import me.francescotonini.beaconservice.AppExecutors;
 import me.francescotonini.beaconservice.BeaconServiceApp;
 import me.francescotonini.beaconservice.Logger;
 import me.francescotonini.beaconservice.R;
-import me.francescotonini.beaconservice.databinding.ActivityMainBinding;
 import me.francescotonini.beaconservice.db.AppDatabase;
 import me.francescotonini.beaconservice.models.AP;
 import me.francescotonini.beaconservice.models.Beacon;
 import me.francescotonini.beaconservice.services.BeaconService;
 import me.francescotonini.beaconservice.services.WifiService;
+import me.francescotonini.beaconservice.databinding.ActivityMainBinding;
 
 public class MainActivity extends BaseActivity {
     @Override
@@ -79,12 +81,14 @@ public class MainActivity extends BaseActivity {
         database = ((BeaconServiceApp)getApplication()).getDataRepository().getDatabase();
         database.beaconDao().getAll().observe(this, beacons -> {
             this.beacons = beacons;
-            binding.numberOfBeacons.setText(String.format("%d beacon salvati in locale", this.beacons.size()));
+            binding.numberOfBeacons.setText(String.format(Locale.getDefault(),
+                    "%d beacon salvati in locale", this.beacons.size()));
         });
 
         database.apDao().getAll().observe(this, aps -> {
             this.aps = aps;
-            binding.numberOfAps.setText(String.format("%d ap salvati in locale", this.aps.size()));
+            binding.numberOfAps.setText(String.format(Locale.getDefault(),
+                    "%d ap salvati in locale", this.aps.size()));
         });
 
         binding.startService.setOnClickListener(click -> startForegroundService());
@@ -159,16 +163,18 @@ public class MainActivity extends BaseActivity {
 
     private void writeToFile(String filename, String json) {
         try {
-            File root = new File(Environment.getExternalStorageDirectory(), "Beacon service");
+            File root = new File(Environment.getExternalStorageDirectory(), "Collected data");
             if (!root.exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 root.mkdirs();
             }
-            File gpxfile = new File(root, String.format("%s_%d.json", filename, System.currentTimeMillis()));
+            File gpxfile = new File(root, String.format(Locale.getDefault(),
+                    "%s_%d.json", filename, System.currentTimeMillis()));
             FileWriter writer = new FileWriter(gpxfile);
             writer.append(json);
             writer.flush();
             writer.close();
-            Toast.makeText(this, "Dati esportati nella cartella \"Beacon service\"", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Dati esportati nella cartella \"Collected data\"", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
         }

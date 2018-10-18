@@ -28,7 +28,9 @@ package me.francescotonini.beaconservice.services;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
@@ -77,7 +79,12 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
         appExecutors = ((BeaconServiceApp)getApplication()).getDataRepository().getAppExecutors();
         database = ((BeaconServiceApp)getApplication()).getDataRepository().getDatabase();
         beaconManager = BeaconManager.getInstanceForApplication(getApplicationContext());
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
+        beaconManager.getBeaconParsers().add(new BeaconParser("Eddystone")
+                .setBeaconLayout(BeaconParser.EDDYSTONE_UID_LAYOUT));
+        beaconManager.getBeaconParsers().add(new BeaconParser("iBeacon")
+                .setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
+        //noinspection deprecation
+        BeaconManager.setDebug(true);
         beaconManager.bind(this);
         beaconRegion = new Region("beacon_region", null, null, null);
     }
@@ -119,6 +126,13 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
     @Override
     public void onBeaconServiceConnect() {
         beaconManager.addRangeNotifier(this);
+        try {
+            beaconManager.startRangingBeaconsInRegion(beaconRegion);
+        } catch (RemoteException e) {
+            setNotification(-1);
+            Logger.e(BeaconService.class.getSimpleName(), e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -187,32 +201,46 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
                 .setContentTitle(notificationTitle)
                 .setContentText(notificationMessage)
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_stat_name)
                 .setOngoing(true).build();
 
         startForeground(NOTIFICATION_ID, notification);
     }
 
+    @Override
+    public boolean bindService(Intent service, ServiceConnection conn, int flags) {
+        return getApplication().getApplicationContext().bindService(service, conn, flags);
+    }
+
+    @Override
+    public void unbindService(ServiceConnection conn) {
+        getApplication().unbindService(conn);
+    }
+
+    @Override
+    public Context getApplicationContext() {
+        return getApplication().getApplicationContext();
+    }
+
     private void startPolling() {
-        try {
-            beaconManager.startRangingBeaconsInRegion(beaconRegion);
-        } catch (RemoteException e) {
-            setNotification(-1);
-            Logger.e(BeaconService.class.getSimpleName(), e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     private void stopPolling() {
         try {
             beaconManager.stopRangingBeaconsInRegion(beaconRegion);
-            beaconManager.unbind(this);
         } catch (RemoteException e) {
             setNotification(-1);
             Logger.e(BeaconService.class.getSimpleName(), e.getMessage());
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopPolling();
+        beaconManager.unbind(this);
     }
 
     private final int NOTIFICATION_ID = 1;

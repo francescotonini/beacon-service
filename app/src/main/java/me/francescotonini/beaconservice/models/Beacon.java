@@ -27,7 +27,11 @@ package me.francescotonini.beaconservice.models;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Rappresenta un beacon
@@ -48,7 +52,8 @@ public class Beacon {
         this.id2 = id2;
         this.id3 = id3;
         this.rssi = rssi;
-        this.timestamp = Calendar.getInstance().getTimeInMillis();
+        this.timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
+                Locale.getDefault()).format(new Date());
     }
 
     /**
@@ -113,7 +118,7 @@ public class Beacon {
      * Restituisce il timestamp di creazione dell'oggetto
      * @return timestamp di creazione dell'oggetto
      */
-    public long getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
@@ -121,16 +126,19 @@ public class Beacon {
      * Imposta il timestamp di creazione dell'oggetto
      * @param timestamp timestamp di creazione dell'oggetto
      */
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
+    public String getType() {return TYPE;}
+
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private final String address;
-    private final String id1;
-    private final String id2;
-    private final String id3;
-    private final int rssi;
-    private long timestamp;
+    private String address;
+    private String id1;
+    private String id2;
+    private String id3;
+    private int rssi;
+    private String timestamp;
+    private final static String TYPE = "BLE";
 }
