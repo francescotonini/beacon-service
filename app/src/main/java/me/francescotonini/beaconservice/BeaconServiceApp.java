@@ -26,6 +26,9 @@
 package me.francescotonini.beaconservice;
 
 import android.app.Application;
+import android.content.ContextWrapper;
+
+import com.pixplicity.easyprefs.library.Prefs;
 
 /**
  * Android Application class. Used for accessing singletons.
@@ -34,6 +37,14 @@ public class BeaconServiceApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Builds preferences
+        new Prefs.Builder()
+            .setContext(this)
+            .setMode(ContextWrapper.MODE_PRIVATE)
+            .setPrefsName(BuildConfig.APPLICATION_ID)
+            .setUseDefaultSharedPreference(true)
+            .build();
 
         appExecutors = new AppExecutors();
     }

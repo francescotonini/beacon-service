@@ -49,6 +49,8 @@ android {
 }
 
 dependencies {
+    // EasyPrefs
+    implementation 'com.pixplicity.easyprefs:library:1.9.0'
     // GSON
     implementation 'com.google.code.gson:gson:2.8.5'
     // RecyclerView, Design support

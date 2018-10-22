@@ -30,6 +30,7 @@
     <string name="end_service">Termina servizio in background</string>
     <string name="export_data">Esporta dati</string>
     <string name="clean_data">Cancella dati</string>
+    <string name="switch_autosave">Salvataggio automatico periodico</string>
 
     <string name="beacon_service_notification_title">Analisi beacon attiva</string>
     <string name="beacon_service_notification_message">%d beacon trovati</string>

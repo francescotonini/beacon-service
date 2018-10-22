@@ -27,6 +27,7 @@ package me.francescotonini.beaconservice.db.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import java.util.List;
@@ -40,6 +41,12 @@ public interface BeaconDao {
     @Query("SELECT * FROM beacons")
     LiveData<List<Beacon>> getAll();
 
+    @Query("SELECT * FROM beacons")
+    List<Beacon> getAllSync();
+
     @Query("DELETE FROM beacons")
     void clear();
+
+    @Delete
+    void delete(List<Beacon> beacons);
 }

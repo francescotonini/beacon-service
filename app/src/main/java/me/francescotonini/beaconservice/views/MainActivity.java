@@ -26,6 +26,8 @@
 package me.francescotonini.beaconservice.views;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -34,8 +36,11 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 import com.google.gson.Gson;
+import com.pixplicity.easyprefs.library.Prefs;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -48,13 +53,12 @@ import me.francescotonini.beaconservice.BeaconServiceApp;
 import me.francescotonini.beaconservice.Logger;
 import me.francescotonini.beaconservice.R;
 import me.francescotonini.beaconservice.db.AppDatabase;
+import me.francescotonini.beaconservice.services.AutoSaverReceiver;
 import me.francescotonini.beaconservice.models.AP;
 import me.francescotonini.beaconservice.models.Beacon;
-import me.francescotonini.beaconservice.services.BeaconService;
-import me.francescotonini.beaconservice.services.WifiService;
 import me.francescotonini.beaconservice.databinding.ActivityMainBinding;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -75,6 +79,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         askForPermissions();
+
+        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
 
         appExecutors = ((BeaconServiceApp)getApplication()).getDataRepository().getAppExecutors();
 
@@ -102,11 +108,25 @@ public class MainActivity extends BaseActivity {
             writeToFile("beacon", gson.toJson(beacons));
             writeToFile("ap", gson.toJson(aps));
         });
+        binding.switchAutosave.setOnCheckedChangeListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        binding.switchAutosave.setChecked(Prefs.getBoolean("autoSaver", false));
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        Prefs.putBoolean("autoSaver", b);
     }
 
     private void startForegroundService() {
         Logger.d(MainActivity.class.getSimpleName(), "Starting foreground service");
 
+        /**
         Intent beaconService = new Intent(this, BeaconService.class);
         beaconService.setAction(BeaconService.ACTIONS.START.toString());
         startService(beaconService);
@@ -114,11 +134,16 @@ public class MainActivity extends BaseActivity {
         Intent wifiService = new Intent(this, WifiService.class);
         wifiService.setAction(WifiService.ACTIONS.START.toString());
         startService(wifiService);
+         **/
+
+        autoSaverIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, AutoSaverReceiver.class), 0);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), INTERVAL_IN_MILLIS, autoSaverIntent);
     }
 
     private void stopForegroundService() {
         Logger.d(MainActivity.class.getSimpleName(), "Stopping foreground service");
 
+        /**
         Intent beaconService = new Intent(this, BeaconService.class);
         beaconService.setAction(BeaconService.ACTIONS.STOP.toString());
         startService(beaconService);
@@ -126,6 +151,11 @@ public class MainActivity extends BaseActivity {
         Intent wifiService = new Intent(this, WifiService.class);
         wifiService.setAction(WifiService.ACTIONS.STOP.toString());
         startService(wifiService);
+         **/
+
+        if (autoSaverIntent != null) {
+            alarmManager.cancel(autoSaverIntent);
+        }
     }
 
     private void askForPermissions() {
@@ -191,4 +221,9 @@ public class MainActivity extends BaseActivity {
     private List<Beacon> beacons;
     private List<AP> aps;
     private AppExecutors appExecutors;
+    private AlarmManager alarmManager;
+    private PendingIntent autoSaverIntent;
+
+    // modificare questo valore per cambiare intervallo di azionamento del service
+    private final int INTERVAL_IN_MILLIS = 60 * 1000;
 }

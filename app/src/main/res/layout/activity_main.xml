@@ -61,6 +61,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_medium"
                 style="@style/primary_text_view"/>
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switch_autosave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_huge"
+                android:text="@string/switch_autosave"/>
             <Button
                 android:id="@+id/export_data"
                 android:layout_width="match_parent"

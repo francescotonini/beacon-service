@@ -52,6 +52,7 @@
             </intent-filter>
         </activity>
         <receiver android:name=".receivers.WifiReceiver" />
+        <receiver android:name=".services.AutoSaverReceiver" />
     </application>
 
 </manifest>
