@@ -161,7 +161,7 @@ public class WifiService extends Service implements WifiReceiver.Listener {
         wifiReceiver.stop();
     }
 
-    private final static int NOTIFICATION_ID = 2;
+    private final int NOTIFICATION_ID = 2;
     private AppDatabase database;
     private AppExecutors appExecutors;
     private WifiReceiver wifiReceiver;
