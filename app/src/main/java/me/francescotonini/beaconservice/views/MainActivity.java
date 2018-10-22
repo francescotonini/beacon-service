@@ -55,6 +55,8 @@ import me.francescotonini.beaconservice.services.AutoSaverReceiver;
 import me.francescotonini.beaconservice.models.AP;
 import me.francescotonini.beaconservice.models.Beacon;
 import me.francescotonini.beaconservice.databinding.ActivityMainBinding;
+import me.francescotonini.beaconservice.services.BeaconService;
+import me.francescotonini.beaconservice.services.WifiService;
 
 public class MainActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
     @Override
@@ -124,7 +126,6 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
     private void startForegroundService() {
         Logger.d(MainActivity.class.getSimpleName(), "Starting foreground service");
 
-        /**
         Intent beaconService = new Intent(this, BeaconService.class);
         beaconService.setAction(BeaconService.ACTIONS.START.toString());
         startService(beaconService);
@@ -132,7 +133,6 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
         Intent wifiService = new Intent(this, WifiService.class);
         wifiService.setAction(WifiService.ACTIONS.START.toString());
         startService(wifiService);
-         **/
 
         autoSaverIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, AutoSaverReceiver.class), 0);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), INTERVAL_IN_MILLIS, autoSaverIntent);
@@ -141,7 +141,6 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
     private void stopForegroundService() {
         Logger.d(MainActivity.class.getSimpleName(), "Stopping foreground service");
 
-        /**
         Intent beaconService = new Intent(this, BeaconService.class);
         beaconService.setAction(BeaconService.ACTIONS.STOP.toString());
         startService(beaconService);
@@ -149,7 +148,6 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
         Intent wifiService = new Intent(this, WifiService.class);
         wifiService.setAction(WifiService.ACTIONS.STOP.toString());
         startService(wifiService);
-         **/
 
         if (autoSaverIntent != null) {
             alarmManager.cancel(autoSaverIntent);
@@ -224,5 +222,5 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
 
     // modificare questo valore per cambiare intervallo di azionamento del service
     // hour * minutes * seconds * milliseconds (1000)
-    private final int INTERVAL_IN_MILLIS = 1 * 60 * 60 * 1000;
+    private final int INTERVAL_IN_MILLIS = 2 * 60 * 1000;
 }
