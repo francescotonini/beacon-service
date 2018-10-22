@@ -127,13 +127,6 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
     @Override
     public void onBeaconServiceConnect() {
         beaconManager.addRangeNotifier(this);
-        try {
-            beaconManager.startRangingBeaconsInRegion(beaconRegion);
-        } catch (RemoteException e) {
-            setNotification(-1);
-            Logger.e(BeaconService.class.getSimpleName(), e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -224,7 +217,13 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
     }
 
     private void startPolling() {
-        // moved to onBeaconServiceConnect method
+        try {
+            beaconManager.startRangingBeaconsInRegion(beaconRegion);
+        } catch (RemoteException e) {
+            setNotification(-1);
+            Logger.e(BeaconService.class.getSimpleName(), e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void stopPolling() {
