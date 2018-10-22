@@ -222,5 +222,5 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
 
     // modificare questo valore per cambiare intervallo di azionamento del service
     // hour * minutes * seconds * milliseconds (1000)
-    private final int INTERVAL_IN_MILLIS = 2 * 60 * 1000;
+    private final int INTERVAL_IN_MILLIS = 1 * 60 * 60 * 1000;
 }
