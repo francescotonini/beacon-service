@@ -40,14 +40,12 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.pixplicity.easyprefs.library.Prefs;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import me.francescotonini.beaconservice.AppExecutors;
 import me.francescotonini.beaconservice.BeaconServiceApp;
 import me.francescotonini.beaconservice.Logger;
@@ -225,5 +223,6 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
     private PendingIntent autoSaverIntent;
 
     // modificare questo valore per cambiare intervallo di azionamento del service
-    private final int INTERVAL_IN_MILLIS = 60 * 1000;
+    // hour * minutes * seconds * milliseconds (1000)
+    private final int INTERVAL_IN_MILLIS = 1 * 60 * 60 * 1000;
 }
