@@ -51,7 +51,7 @@ import me.francescotonini.beaconservice.BeaconServiceApp;
 import me.francescotonini.beaconservice.Logger;
 import me.francescotonini.beaconservice.R;
 import me.francescotonini.beaconservice.db.AppDatabase;
-import me.francescotonini.beaconservice.services.AutoSaverReceiver;
+import me.francescotonini.beaconservice.receivers.AutoSaverReceiver;
 import me.francescotonini.beaconservice.models.AP;
 import me.francescotonini.beaconservice.models.Beacon;
 import me.francescotonini.beaconservice.databinding.ActivityMainBinding;

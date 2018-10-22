@@ -23,7 +23,7 @@
  *
  */
 
-package me.francescotonini.beaconservice.services;
+package me.francescotonini.beaconservice.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

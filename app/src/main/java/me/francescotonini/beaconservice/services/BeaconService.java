@@ -235,7 +235,6 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
             Logger.e(BeaconService.class.getSimpleName(), e.getMessage());
             e.printStackTrace();
         }
-
     }
 
     @Override
