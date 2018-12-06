@@ -34,8 +34,13 @@ import android.net.wifi.ScanResult;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import me.francescotonini.beaconservice.AppExecutors;
 import me.francescotonini.beaconservice.BeaconServiceApp;
 import me.francescotonini.beaconservice.Logger;
@@ -113,12 +118,15 @@ public class WifiService extends Service implements WifiReceiver.Listener {
     public void onData(List<ScanResult> scanResults) {
         Logger.v(WifiService.class.getSimpleName(), "Last scan found " + scanResults.size() + " ap's");
 
+        String timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
+                Locale.getDefault()).format(new Date());
+
         // Filtra ap dell'università
         List<AP> univrAPs = new ArrayList<>();
         for(ScanResult result: scanResults) {
             // result.SSID.equals("UNIVAIR-OPEN")
             if (true) {
-                univrAPs.add(new AP(result.BSSID, result.level));
+                univrAPs.add(new AP(result.BSSID, result.level, timestamp));
             }
         }
 

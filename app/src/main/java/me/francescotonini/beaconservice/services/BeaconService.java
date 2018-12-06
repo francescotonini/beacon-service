@@ -41,9 +41,14 @@ import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import me.francescotonini.beaconservice.AppExecutors;
 import me.francescotonini.beaconservice.BeaconServiceApp;
 import me.francescotonini.beaconservice.Logger;
@@ -133,6 +138,9 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
     public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
         Logger.d(BeaconService.class.getSimpleName(), String.format("Found %s beacons in range", collection.size()));
 
+        String timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
+                Locale.getDefault()).format(new Date());
+
         // Converto l'oggetto Beacon di AltBeacon in un oggetto "pulito" da salvare nel database
         List<me.francescotonini.beaconservice.models.Beacon> listOfBeacons = new ArrayList<>();
         for (org.altbeacon.beacon.Beacon b: collection) {
@@ -168,7 +176,8 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
                     id1,
                     id2,
                     id3,
-                    b.getRssi()
+                    b.getRssi(),
+                    timestamp
             ));
         }
 

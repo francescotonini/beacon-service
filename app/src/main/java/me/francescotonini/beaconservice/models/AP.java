@@ -40,13 +40,13 @@ public class AP {
      * Inizializza una nuova istanza di questa classe
      * @param bssid bssid
      * @param level level
+     * @param timestamp timestamp
      */
-    public AP(String bssid, int level) {
+    public AP(String bssid, int level, String timestamp) {
         this.bssid = bssid;
         this.level = level;
         this.type = "WIFI";
-        this.timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
-                Locale.getDefault()).format(new Date());
+        this.timestamp = timestamp;
     }
 
     public int getId() {

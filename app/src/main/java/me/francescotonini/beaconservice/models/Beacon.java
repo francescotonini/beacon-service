@@ -43,15 +43,15 @@ public class Beacon {
      * @param id2 id2 del beacon
      * @param id3 id3 del beacon
      * @param rssi rssi del beacon
+     * @param timestamp timestamp
      */
-    public Beacon(String address, String id1, String id2, String id3, int rssi) {
+    public Beacon(String address, String id1, String id2, String id3, int rssi, String timestamp) {
         this.address = address;
         this.id1 = id1;
         this.id2 = id2;
         this.id3 = id3;
         this.rssi = rssi;
-        this.timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
-                Locale.getDefault()).format(new Date());
+        this.timestamp = timestamp;
     }
 
     /**
