@@ -81,6 +81,7 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
 
         Logger.d(BeaconService.class.getSimpleName(), "Service created");
 
+        lastUpdateTimestamp = System.currentTimeMillis();
         appExecutors = ((BeaconServiceApp)getApplication()).getDataRepository().getAppExecutors();
         database = ((BeaconServiceApp)getApplication()).getDataRepository().getDatabase();
         beaconManager = BeaconManager.getInstanceForApplication(getApplicationContext());
@@ -140,6 +141,15 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
 
         String timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
                 Locale.getDefault()).format(new Date());
+
+        long currentUpdateTimestamp = System.currentTimeMillis();
+        if (currentUpdateTimestamp - lastUpdateTimestamp <= 100) {
+            // Ho ricevuto un aggiornamento sotto la soglia minima di aggiornamento (ogni 100ms).
+            // Ignoro i dati ricevuti
+            Logger.v(BeaconService.class.getSimpleName(), "Got an update below the minimum threshold. Skip.");
+            return;
+        }
+        lastUpdateTimestamp = currentUpdateTimestamp;
 
         // Converto l'oggetto Beacon di AltBeacon in un oggetto "pulito" da salvare nel database
         List<me.francescotonini.beaconservice.models.Beacon> listOfBeacons = new ArrayList<>();
@@ -258,4 +268,5 @@ public class BeaconService extends Service implements BeaconConsumer, RangeNotif
     private AppDatabase database;
     private AppExecutors appExecutors;
     private int totalBeaconsFound;
+    private long lastUpdateTimestamp = 0;
 }

@@ -78,6 +78,7 @@ public class WifiService extends Service implements WifiReceiver.Listener {
         appExecutors = ((BeaconServiceApp)getApplication()).getDataRepository().getAppExecutors();
         database = ((BeaconServiceApp)getApplication()).getDataRepository().getDatabase();
         wifiReceiver = new WifiReceiver(getApplicationContext(), this);
+        lastUpdateTimestamp = System.currentTimeMillis();
     }
 
     @Override
@@ -116,6 +117,15 @@ public class WifiService extends Service implements WifiReceiver.Listener {
 
     @Override
     public void onData(List<ScanResult> scanResults) {
+        long currentUpdateTimestamp = System.currentTimeMillis();
+        if (currentUpdateTimestamp - lastUpdateTimestamp <= 100) {
+            // Ho ricevuto un aggiornamento sotto la soglia minima di aggiornamento (ogni 100ms).
+            // Ignoro i dati ricevuti
+            Logger.v(WifiService.class.getSimpleName(), "Got an update below the minimum threshold. Skip.");
+            return;
+        }
+        lastUpdateTimestamp = currentUpdateTimestamp;
+
         Logger.v(WifiService.class.getSimpleName(), "Last scan found " + scanResults.size() + " ap's");
 
         String timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS",
@@ -174,4 +184,5 @@ public class WifiService extends Service implements WifiReceiver.Listener {
     private AppExecutors appExecutors;
     private WifiReceiver wifiReceiver;
     private int totalApFound;
+    private long lastUpdateTimestamp = 0;
 }
